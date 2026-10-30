@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Data Analysis Workshop</title>
+<meta name="description" content="Workshop resources: Smart Data Analysis in Health and Medicine — R, the RREAAAPP Workflow and AI Assistants. Saturday 7 November 2026, School of Medical Sciences, Universiti Sains Malaysia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a2342;
+    --blue: #2176ae;
+    --teal: #17a89e;
+    --green: #27ae60;
+    --amber: #f39c12;
+    --bg: #f6f8fb;
+    --surface: #ffffff;
+    --text: #1b2533;
+    --muted: #5b6878;
+    --border: #dde3ea;
+    --chip: #eaf2f9;
+    --break: #f3f5f8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e1520;
+      --surface: #16202d;
+      --text: #e6ebf1;
+      --muted: #9aa8b8;
+      --border: #2a3646;
+      --chip: #1d2c3d;
+      --break: #121b27;
+      --blue: #5aa9e6;
+      --teal: #3cc7bc;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1520; --surface: #16202d; --text: #e6ebf1; --muted: #9aa8b8;
+    --border: #2a3646; --chip: #1d2c3d; --break: #121b27; --blue: #5aa9e6; --teal: #3cc7bc;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  a { color: var(--blue); }
+  header.hero {
+    background: var(--navy);
+    color: #fff;
+    padding: 48px 16px 40px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+  header.hero .wrap { padding: 0; }
+  .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: 12px; font-weight: 600; color: #9cc6ea; margin: 0 0 8px; }
+  h1 { font-size: clamp(28px, 5vw, 42px); line-height: 1.15; margin: 0 0 8px; }
+  .subtitle { font-size: clamp(17px, 2.6vw, 21px); color: #d4e3f1; margin: 0 0 24px; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 0; padding: 0; list-style: none; color: #e9f1f8; }
+  .facts li strong { color: #fff; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 18px; border-radius: 8px; font-weight: 600; text-decoration: none;
+    border: 1px solid transparent; font-size: 15px;
+  }
+  .btn-primary { background: var(--amber); color: #1b1b1b; }
+  .btn-light { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.35); }
+  .btn-outline { background: var(--surface); color: var(--blue); border-color: var(--blue); }
+  .btn:hover { filter: brightness(1.07); }
+  main { padding: 32px 0 48px; }
+  section { margin-bottom: 40px; }
+  h2 { font-size: 24px; margin: 0 0 6px; }
+  .lead { color: var(--muted); margin: 0 0 18px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .checklist { list-style: none; margin: 0; padding: 0; }
+  .checklist li { padding: 8px 0 8px 30px; position: relative; border-bottom: 1px solid var(--border); }
+  .checklist li:last-child { border-bottom: 0; }
+  .checklist li::before { content: "☐"; position: absolute; left: 4px; top: 7px; color: var(--teal); font-size: 18px; line-height: 1.3; }
+  .note { font-size: 14px; color: var(--muted); }
+  .topic { display: grid; grid-template-columns: 120px 1fr auto; gap: 16px; align-items: start; padding: 18px 20px; }
+  .topic + .topic { border-top: 1px solid var(--border); }
+  .topic-time { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .topic-time small { display: block; font-weight: 400; color: var(--muted); }
+  .badge { display: inline-block; width: 28px; height: 28px; border-radius: 6px; color: #fff; font-weight: 700; text-align: center; line-height: 28px; margin-right: 8px; }
+  .topic h3 { margin: 0 0 4px; font-size: 18px; display: flex; align-items: center; }
+  .topic p { margin: 0; color: var(--muted); font-size: 15px; }
+  .topic .zip { margin-top: 6px; font-size: 14px; }
+  .links { display: flex; flex-direction: column; gap: 8px; min-width: 170px; }
+  .links .btn { justify-content: center; padding: 9px 14px; font-size: 14px; }
+  .break { background: var(--break); color: var(--muted); padding: 8px 20px; font-size: 14px; border-top: 1px solid var(--border); }
+  code { background: var(--chip); padding: 1px 6px; border-radius: 4px; font-size: .92em; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; }
+  .warn { border-left: 4px solid var(--amber); }
+  footer { border-top: 1px solid var(--border); padding: 24px 0 40px; color: var(--muted); font-size: 14px; }
+  @media (max-width: 720px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .topic { grid-template-columns: 1fr; gap: 10px; }
+    .links { flex-direction: row; flex-wrap: wrap; min-width: 0; }
+    .links .btn { flex: 1 1 140px; }
+    th:nth-child(3), td:nth-child(3) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Workshop · Universiti Sains Malaysia</p>
+    <h1>Smart Data Analysis in Health and Medicine</h1>
+    <p class="subtitle">R, the RREAAAPP Workflow and AI Assistants</p>
+    <ul class="facts">
+      <li><strong>Saturday 7 November 2026</strong>, 2:00–6:00 pm</li>
+      <li>School of Medical Sciences, USM</li>
+      <li>Prof. Dr. Kamarul Imran Musa (KIM)</li>
+    </ul>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="notes/00_setup_guide.html">Setup guide — do this first</a>
+      <a class="btn btn-light" href="https://drive.google.com/drive/folders/1VDWzxGIc9EciOzNeMm9zAHS8sS9EMDfC?usp=sharing" target="_blank" rel="noopener">Download files (Google Drive)</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="before">
+    <h2>Before you come</h2>
+    <p class="lead">Finish these at least one week before the workshop. The <a href="notes/00_setup_guide.html">setup guide</a> shows every step (about 60–90 minutes).</p>
+    <div class="grid-2">
+      <div class="card">
+        <ul class="checklist">
+          <li><strong>R</strong> and <strong>Positron</strong> installed on your laptop (Positron includes Quarto). We do not use RStudio or Posit Cloud.</li>
+          <li>A folder called <code>workshop</code> in your <strong>Documents</strong> folder — your project for the whole day.</li>
+          <li>The check script printed <strong>All set!</strong> in Positron.</li>
+          <li><strong>Google Antigravity 2.0</strong> (the Antigravity <em>App</em>, not the Antigravity IDE) installed and signed in.</li>
+          <li>Antigravity can find R (<code>Rscript --version</code> works).</li>
+          <li>Laptop charger packed.</li>
+        </ul>
+      </div>
+      <div class="card warn">
+        <p style="margin-top:0"><strong>Use a personal Gmail for Antigravity.</strong> Some organisations' Google accounts (university or workplace) block Google Antigravity.</p>
+        <p><strong>Claude subscribers</strong> (Pro or higher): you are encouraged to install <a href="https://claude.ai/download" target="_blank" rel="noopener">Claude Desktop</a> too. Not needed for the exercises.</p>
+        <p class="note" style="margin-bottom:0">Stuck? Email <a href="mailto:drki.musa@gmail.com">drki.musa@gmail.com</a> with a screenshot and your laptop type.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="programme">
+    <h2>Programme and materials</h2>
+    <p class="lead">Open the slides and hands-on notes in your browser. Download each topic's zip from the Google Drive folder and extract it <strong>into</strong> <code>Documents\workshop</code>.</p>
+    <div class="card" style="padding:0">
+
+      <div class="topic">
+        <div class="topic-time">2:00–3:05<small>25 + 40 min</small></div>
+        <div>
+          <h3><span class="badge" style="background:var(--navy)">A</span>Introduction to R</h3>
+          <p>R, Positron, packages, functions and Quarto for reproducible reports.</p>
+          <p class="zip">Zip: <code>01_intro_r_project.zip</code></p>
+        </div>
+        <div class="links">
+          <a class="btn btn-outline" href="slides/01_intro_r.html">Slides</a>
+          <a class="btn btn-outline" href="notes/01_intro_r_handson.html">Hands-on</a>
+        </div>
+      </div>
+      <div class="break">3:05–3:10 · Break</div>
+
+      <div class="topic">
+        <div class="topic-time">3:10–4:00<small>25 + 25 min</small></div>
+        <div>
+          <h3><span class="badge" style="background:var(--blue)">B</span>The RREAAAPP workflow</h3>
+          <p>Reason, Read, Explore, Assume, Apply, Assess, Present, Publish — on the fasting blood sugar data.</p>
+          <p class="zip">Zip: <code>02_rreaaapp_project.zip</code></p>
+        </div>
+        <div class="links">
+          <a class="btn btn-outline" href="slides/02_rreaaapp_workflow.html">Slides</a>
+          <a class="btn btn-outline" href="notes/02_rreaaapp_handson.html">Hands-on</a>
+        </div>
+      </div>
+      <div class="break">4:00–4:05 · Break</div>
+
+      <div class="topic">
+        <div class="topic-time">4:05–4:50<small>25 + 20 min</small></div>
+        <div>
+          <h3><span class="badge" style="background:var(--teal)">C</span>Introduction to AI assistants</h3>
+          <p>Gemini and Claude, Antigravity 2.0, Markdown, prompts, checking AI output, <code>AGENTS.md</code>.</p>
+          <p class="zip">Zip: <code>03_fbs_ai_prompts.zip</code> (only if your folder has no data yet)</p>
+        </div>
+        <div class="links">
+          <a class="btn btn-outline" href="slides/03_ai_assistants.html">Slides</a>
+          <a class="btn btn-outline" href="notes/03_ai_assistants_handson.html">Hands-on</a>
+        </div>
+      </div>
+      <div class="break">4:50–4:55 · Break</div>
+
+      <div class="topic">
+        <div class="topic-time">4:55–6:00<small>25 + 40 min</small></div>
+        <div>
+          <h3><span class="badge" style="background:var(--green)">D</span>AI assistants with the workflow</h3>
+          <p>Project set-up, AI-written plans, one step at a time, verification and a Quarto report. Wrap-up 5:55–6:00.</p>
+          <p class="zip">Zip: <code>04_fbs_ai_project.zip</code></p>
+        </div>
+        <div class="links">
+          <a class="btn btn-outline" href="slides/04_ai_integration.html">Slides</a>
+          <a class="btn btn-outline" href="notes/04_ai_integration_handson.html">Hands-on</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="files">
+    <h2>Downloads</h2>
+    <p class="lead">All files are in one shared Google Drive folder.</p>
+    <div class="card">
+      <table>
+        <thead><tr><th>File</th><th>What it is</th><th>When</th></tr></thead>
+        <tbody>
+          <tr><td><code>01_intro_r_project.zip</code></td><td>Topic A: Quarto report and data</td><td>Before 2:25 pm</td></tr>
+          <tr><td><code>02_rreaaapp_project.zip</code></td><td>Topic B: complete RREAAAPP R script</td><td>Break at 3:05</td></tr>
+          <tr><td><code>03_fbs_ai_prompts.zip</code></td><td>Topic C: data only (backup)</td><td>If needed</td></tr>
+          <tr><td><code>04_fbs_ai_project.zip</code></td><td>Topic D: verification checklist</td><td>Break at 4:50</td></tr>
+          <tr><td><code>mssm_fbs_workshop.xlsx</code></td><td>The dataset (already inside each zip)</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <p style="margin:16px 0 0"><a class="btn btn-outline" href="https://drive.google.com/drive/folders/1VDWzxGIc9EciOzNeMm9zAHS8sS9EMDfC?usp=sharing" target="_blank" rel="noopener">Open the Google Drive folder</a></p>
+      <p class="note" style="margin-bottom:0"><strong>Extracting a zip (Windows):</strong> right-click → <em>Extract All…</em> → <em>Browse</em> → choose <code>Documents\workshop</code> → <em>Extract</em>. Do not accept the folder Windows suggests. <strong>Mac:</strong> double-click the zip and drag its contents into <code>Documents/workshop</code>.</p>
+    </div>
+  </section>
+
+  <section id="data">
+    <div class="card">
+      <p style="margin:0"><strong>About the data.</strong> The dataset has been cleaned to make learning data analysis with AI easier for beginners. Results from it are for <strong>learning only</strong> — not research findings or clinical evidence.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Prof. Dr. Kamarul Imran Musa · Professor of Medical Epidemiology and Statistics, School of Medical Sciences, Universiti Sains Malaysia ·
+    <a href="mailto:drki.musa@gmail.com">drki.musa@gmail.com</a> · <a href="https://myanalytics.com.my" target="_blank" rel="noopener">myanalytics.com.my</a>
+  </div>
+</footer>
+
+</body>
+</html>
